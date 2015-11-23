@@ -28,17 +28,27 @@
     }
     return _imageArray;
 }
--(instancetype)init
+-(instancetype)initWithSlideDirection:(YWPickerViewSlideDirection)direction
 {
+    
     if (self=[super init]) {
         self.frame = [UIScreen mainScreen].bounds;
-        self.YWPickerViewSlideDirection = YWPickerViewSlideDirectionVertical;
-        self.btnAdd.tag=99;
+        self.YWPickerViewSlideDirection = direction;
         [self setBackgroundColor:[UIColor whiteColor]];
         [self setupPickerview];
     }
     return self;
+    
 }
+//-(instancetype)init
+//{
+//    if (self=[super init]) {
+//        self.frame = [UIScreen mainScreen].bounds;
+//        [self setBackgroundColor:[UIColor whiteColor]];
+//        [self setupPickerview];
+//    }
+//    return self;
+//}
 
 -(void)setupPickerview
 {
@@ -197,7 +207,6 @@
     CGFloat btnHadd = 70;
     CGFloat btnXadd = margin*((temp%btnCnt)+1)+temp%btnCnt*70;
     CGFloat btnYadd = margin*((temp/btnCnt)+1)+temp/btnCnt*70;
-    self.btnAdd.tag = 99;
     self.btnAdd.frame = CGRectMake(btnXadd, btnYadd, btnWadd, btnHadd);
     [self.imageContent addSubview:self.btnAdd];
         

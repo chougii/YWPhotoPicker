@@ -19,4 +19,6 @@ typedef void (^YWPickerViewFinishedBlock) (NSArray *imageArray);
 @property (nonatomic,strong) NSMutableArray * imageArray;
 @property (nonatomic,assign)YWPickerViewSlideDirection YWPickerViewSlideDirection;
 @property (nonatomic,copy) YWPickerViewFinishedBlock YWPickerViewFinishedBlock;
+
+-(instancetype)initWithSlideDirection:(YWPickerViewSlideDirection)direction;
 @end

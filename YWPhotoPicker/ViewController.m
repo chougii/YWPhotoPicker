@@ -28,7 +28,7 @@
     [btn setTitle:@"picker" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(loadPicker) forControlEvents:UIControlEventTouchUpInside];
-    btn.backgroundColor = [UIColor redColor];
+    
     self.btn= btn;
     [self.view addSubview:btn];
 
@@ -36,7 +36,7 @@
 }
 -(void)loadPicker
 {
-    YWPhotoPicker * picker = [[YWPhotoPicker alloc] init];
+    YWPhotoPicker * picker = [[YWPhotoPicker alloc] initWithSlideDirection:YWPickerViewSlideDirectionHorizontal];
     picker.YWPickerViewFinishedBlock = ^(NSArray * imageArray){
         [self imageinfo:imageArray];
     };
