@@ -4,7 +4,7 @@
 //
 //  Created by ChouGii on 15/9/2.
 //  Copyright (c) 2015年 zyw. All rights reserved.
-//  
+//
 
 #import "YWPhotoPicker.h"
 @interface YWPhotoPicker()<UINavigationControllerDelegate,UIImagePickerControllerDelegate,UIActionSheetDelegate>{
@@ -40,15 +40,6 @@
     return self;
     
 }
-//-(instancetype)init
-//{
-//    if (self=[super init]) {
-//        self.frame = [UIScreen mainScreen].bounds;
-//        [self setBackgroundColor:[UIColor whiteColor]];
-//        [self setupPickerview];
-//    }
-//    return self;
-//}
 
 -(void)setupPickerview
 {
@@ -60,8 +51,8 @@
     }else{
         view.frame = CGRectMake(0,sbd.size.height, sbd.size.width, sbd.size.height);
     }
-    
-    
+    //hide navigationbar
+    NSLog(@"%@",self.superview);
     //header action view
     UIView * headerView = [[UIView alloc] init];
     headerView.frame = CGRectMake(0, 20, sbd.size.width, 44);
@@ -79,7 +70,7 @@
     
     //content view
     UIView * contentView = [[UIView alloc] init];
-    contentView.frame = CGRectMake(0, 44, sbd.size.width, sbd.size.height-44
+    contentView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), sbd.size.width, sbd.size.height-44
                                    );
     //load the first add button
     UIButton * btnAdd = [[UIButton alloc] init];
@@ -91,7 +82,11 @@
     [contentView addSubview:btnAdd];
     self.btnAdd = btnAdd;
     [view addSubview:contentView];
-    [self addSubview:view];
+    
+    
+    //[self addSubview:view];
+    [[UIApplication sharedApplication].keyWindow addSubview:view];
+    
     [UIView animateWithDuration:0.3 animations:^{
         view.frame = sbd;
     }];
@@ -114,9 +109,14 @@
     
     picker.sourceType = type;
     
-    [[self activityViewController] presentViewController:picker animated:YES completion:^{
-      
+    [picker becomeFirstResponder];
+    
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:picker animated:YES completion:^{
+        self.mainView.frame = CGRectMake(0, sbd.size.height, sbd.size.width, sbd.size.height);
     }];
+    //    [[self activityViewController] presentViewController:picker animated:YES completion:^{
+    //
+    //    }];
     
     self.picker = picker;
 }
@@ -142,13 +142,16 @@
             self.mainView.frame = CGRectMake(0,sbd.size.height, sbd.size.width, sbd.size.height);
         }
     } completion:^(BOOL finished) {
-        [self.mainView removeFromSuperview];
+        NSLog(@"%@",self.mainView.superview);
+        [self removeFromSuperview];
     }];
 }
 #pragma mark - image picker delegte
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-    [picker dismissViewControllerAnimated:YES completion:^{}];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        self.mainView.frame = CGRectMake(0, 0, sbd.size.width, sbd.size.height);
+    }];
     
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     NSString * imgName = [NSString stringWithFormat:@"%@.png",[NSDate date]];
@@ -179,17 +182,17 @@
     int margin = (sbd.size.width - btnCnt*70)/(btnCnt+1);
     CGFloat btnW = 70;
     CGFloat btnH = btnW;
-
+    
     for (int i = 0; i<self.imageArray.count; i++) {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       UIButton * btnImg = [[UIButton alloc] init];
+        UIButton * btnImg = [[UIButton alloc] init];
         [btnImg setImage:self.imageArray[i] forState:UIControlStateNormal];
-                CGFloat btnX = margin*((i%btnCnt)+1)+i%btnCnt*70;
+        CGFloat btnX = margin*((i%btnCnt)+1)+i%btnCnt*70;
         CGFloat btnY = margin*((i/btnCnt)+1)+i/btnCnt*70;
         btnImg.frame = CGRectMake(btnX, btnY, btnW, btnH);
         [btnImg addTarget:self action:@selector(imageButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         [self.imageContent addSubview:btnImg];
         //delete button
-       
+        
         UIButton * delete = [[UIButton alloc] init];
         delete.tag = i;
         delete.frame = CGRectMake(btnX+btnW-18, btnY, 18, 18);
@@ -197,7 +200,7 @@
         [delete addTarget:self action:@selector(deleteImage:) forControlEvents:UIControlEventTouchUpInside];
         
         [self.imageContent addSubview:delete];
-            
+        
         
     }
     //add button
@@ -209,7 +212,7 @@
     CGFloat btnYadd = margin*((temp/btnCnt)+1)+temp/btnCnt*70;
     self.btnAdd.frame = CGRectMake(btnXadd, btnYadd, btnWadd, btnHadd);
     [self.imageContent addSubview:self.btnAdd];
-        
+    
     
     
 }
@@ -228,9 +231,10 @@
                 sourceType =2;
                 break;
         }
+        
         [self showPickerWithType:sourceType];
     }
-
+    
 }
 
 
