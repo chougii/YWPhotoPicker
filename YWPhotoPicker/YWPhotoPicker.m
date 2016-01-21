@@ -59,6 +59,14 @@
     [headerView setBackgroundColor:[UIColor whiteColor]];
     [view addSubview:headerView];
     //actions
+    //cancel
+    UIButton * btnCancel = [[UIButton alloc] init];
+    btnCancel.frame = CGRectMake(0, 0, 70, 40);
+    [btnCancel setTitle:@"取消" forState:UIControlStateNormal];
+    [btnCancel setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [btnCancel addTarget:self action:@selector(btnCancelClick) forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:btnCancel];
+    
     //save
     UIButton * btnSave = [[UIButton alloc] init];
     btnSave.frame = CGRectMake(sbd.size.width-70, 0, 70, 40);
@@ -70,12 +78,12 @@
     
     //content view
     UIView * contentView = [[UIView alloc] init];
-    contentView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), sbd.size.width, sbd.size.height-44
-                                   );
+    contentView.frame = CGRectMake(0, CGRectGetMaxY(headerView.frame), sbd.size.width, sbd.size.height-44);
     //load the first add button
     UIButton * btnAdd = [[UIButton alloc] init];
     btnAdd.frame = CGRectMake(10, 10, 70, 70);
-    [btnAdd setTitle:@"add" forState:UIControlStateNormal];
+    [btnAdd setTitle:@"+" forState:UIControlStateNormal];
+    btnAdd.titleLabel.font = [UIFont systemFontOfSize:30];
     [btnAdd setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     [btnAdd addTarget:self action:@selector(btnAddClick) forControlEvents:UIControlEventTouchUpInside];
     self.imageContent = contentView;
@@ -97,6 +105,20 @@
 {
     
 }
+-(void)btnCancelClick
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        if (self.YWPickerViewSlideDirection == YWPickerViewSlideDirectionHorizontal) {
+            self.mainView.frame = CGRectMake(sbd.size.width, 0, sbd.size.width, sbd.size.height);
+        }else{
+            self.mainView.frame = CGRectMake(0,sbd.size.height, sbd.size.width, sbd.size.height);
+        }
+    } completion:^(BOOL finished) {
+        NSLog(@"%@",self.mainView.superview);
+        [self removeFromSuperview];
+    }];
+}
+
 -(void)showPickerWithType:(NSInteger)type
 {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
